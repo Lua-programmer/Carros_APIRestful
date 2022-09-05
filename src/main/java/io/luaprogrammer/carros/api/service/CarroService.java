@@ -21,4 +21,8 @@ public class CarroService {
     public Optional<Carro> getCarroById(Long id) {
         return carroRepository.findById(id);
     }
+
+    public List<Carro> getCarroByTipo(String tipo) {
+        return carroRepository.findByTipo(tipo);
+    }
 }

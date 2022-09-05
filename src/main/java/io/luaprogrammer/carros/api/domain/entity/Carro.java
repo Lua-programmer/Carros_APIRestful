@@ -20,4 +20,7 @@ public class Carro {
 
     @Column
     private String nome;
+
+    @Column
+    private String tipo;
 }

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -15,5 +16,9 @@ public class CarroService {
 
     public List<Carro> getAllCarros() {
         return carroRepository.findAll();
+    }
+
+    public Optional<Carro> getCarroById(Long id) {
+        return carroRepository.findById(id);
     }
 }

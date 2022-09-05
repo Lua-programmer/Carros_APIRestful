@@ -3,10 +3,7 @@ package io.luaprogrammer.carros.api.rest;
 import io.luaprogrammer.carros.api.domain.entity.Carro;
 import io.luaprogrammer.carros.api.service.CarroService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,5 +28,10 @@ public class CarrosController {
     @GetMapping("/tipo/{tipo}")
     public List<Carro> listarCarroByTipo(@PathVariable("tipo") String tipo) {
         return carroService.getCarroByTipo(tipo);
+    }
+
+    @PostMapping
+    public void post(@RequestBody Carro carro) {
+        carroService.save(carro);
     }
 }

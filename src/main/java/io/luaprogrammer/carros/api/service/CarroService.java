@@ -25,4 +25,8 @@ public class CarroService {
     public List<Carro> getCarroByTipo(String tipo) {
         return carroRepository.findByTipo(tipo);
     }
+
+    public Carro save(Carro carro) {
+        return carroRepository.save(carro);
+    }
 }

@@ -1,0 +1,17 @@
+HELP.md
+.gradle
+build/*
+gradle/*
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+.idea*
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+settings.gradle
+gradlew.bat
+gradlew

@@ -15,3 +15,5 @@ out/
 settings.gradle
 gradlew.bat
 gradlew
+
+main/resources/application.properties

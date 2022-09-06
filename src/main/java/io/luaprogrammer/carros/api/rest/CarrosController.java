@@ -6,7 +6,9 @@ import io.luaprogrammer.carros.api.service.CarroService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,19 +46,33 @@ public class CarrosController {
     public ResponseEntity listarCarroByTipo(@PathVariable("tipo") String tipo) {
         List<CarroDto> carros = carroService.getCarroByTipo(tipo);
 
-        return  carros.isEmpty() ?  ResponseEntity.noContent().build() : ResponseEntity.ok(carros);
+        return carros.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(carros);
     }
 
     @PostMapping
-    public void post(@RequestBody Carro carro) {
-        carroService.insert(carro);
+    public ResponseEntity post(@RequestBody Carro carro) {
+
+        CarroDto c = carroService.insert(carro);
+
+        URI location = getUri(c.getId());
+        return ResponseEntity.created(location).build();
+    }
+
+    private URI getUri(Long id) {
+        return ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(id).toUri();
     }
 
     @PutMapping("/update/{id}")
-    public String put(@PathVariable("id") Long id, @RequestBody Carro carro) {
-        Carro c = carroService.update(carro, id);
+    public ResponseEntity put(@PathVariable("id") Long id, @RequestBody Carro carro) {
 
-        return "Carro atualizado com sucesso";
+        carro.setId(id);
+
+        CarroDto c = carroService.update(carro, id);
+
+        return c != null ?
+                ResponseEntity.ok(c) :
+                ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/delete/{id}")

@@ -33,28 +33,31 @@ public class CarroService {
         return carroRepository.findByTipo(tipo).stream().map(CarroDto::create).collect(Collectors.toList());
     }
 
-    public Carro insert(Carro carro) {
-        return carroRepository.save(carro);
+    public CarroDto insert(Carro carro) {
+        Assert.isNull(carro.getId(), "Não foi possível inserir o registro");
+        return CarroDto.create(carroRepository.save(carro));
     }
 
 
-    public Carro update(Carro carro, Long id) {
-        Assert.notNull(id, "Não foi possível atualizar o registro");
+    public CarroDto update(Carro carro, Long id) {
+        Assert.notNull(id,"Não foi possível atualizar o registro");
 
-        Optional<CarroDto> op = getCarroById(id);
-        if (op.isPresent()) {
-            CarroDto carDB = op.get();
+        // Busca o carro no banco de dados
+        Optional<Carro> optional = carroRepository.findById(id);
+        if(optional.isPresent()) {
+            Carro db = optional.get();
+            // Copiar as propriedades
+            db.setNome(carro.getNome());
+            db.setTipo(carro.getTipo());
+            System.out.println("Carro id " + db.getId());
 
-            //Copia as propriedades
-            carDB.setNome(carro.getNome());
-            carDB.setTipo(carro.getTipo());
-            System.out.println("Carro id " + carDB.getId());
+            // Atualiza o carro
+            carroRepository.save(db);
 
-            //Atualiza o carro
-            carroRepository .save(carDB);
-            return carro;
+            return CarroDto.create(db);
         } else {
             return null;
+            //throw new RuntimeException("Não foi possível atualizar o registro");
         }
     }
 

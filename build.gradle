@@ -18,6 +18,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation group: 'org.modelmapper.extensions', name: 'modelmapper-spring', version: '3.1.0'
     runtimeOnly 'mysql:mysql-connector-java'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

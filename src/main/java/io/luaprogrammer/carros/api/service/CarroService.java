@@ -22,15 +22,15 @@ public class CarroService {
 //        List<CarroDto> list = carros.stream().map(CarroDto::new).collect(Collectors.toList());
 //        return list;
 
-        return  carroRepository.findAll().stream().map(CarroDto::new).collect(Collectors.toList());
+        return  carroRepository.findAll().stream().map(CarroDto::create).collect(Collectors.toList());
     }
 
     public Optional<CarroDto> getCarroById(Long id) {
-        return carroRepository.findById(id).map(CarroDto::new); //quando eu quero converter um tipo optional para outro
+        return carroRepository.findById(id).map(CarroDto::create); //quando eu quero converter um tipo optional para outro
     }
 
     public List<CarroDto> getCarroByTipo(String tipo) {
-        return carroRepository.findByTipo(tipo).stream().map(CarroDto::new).collect(Collectors.toList());
+        return carroRepository.findByTipo(tipo).stream().map(CarroDto::create).collect(Collectors.toList());
     }
 
     public Carro insert(Carro carro) {
@@ -51,7 +51,7 @@ public class CarroService {
             System.out.println("Carro id " + carDB.getId());
 
             //Atualiza o carro
-            carroRepository.save(carDB);
+            carroRepository .save(carDB);
             return carro;
         } else {
             return null;

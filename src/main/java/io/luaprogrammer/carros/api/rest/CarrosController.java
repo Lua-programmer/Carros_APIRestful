@@ -1,8 +1,10 @@
 package io.luaprogrammer.carros.api.rest;
 
+import io.luaprogrammer.carros.api.domain.DTO.CarroDto;
 import io.luaprogrammer.carros.api.domain.entity.Carro;
 import io.luaprogrammer.carros.api.service.CarroService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,18 +18,33 @@ public class CarrosController {
     private CarroService carroService;
 
     @GetMapping
-    public List<Carro> listarCarros() {
-        return carroService.getAllCarros();
+    public ResponseEntity listarCarros() {
+        return ResponseEntity.ok(carroService.getAllCarros());
     }
 
     @GetMapping("/{id}")
-    public Optional<Carro> listarCarroById(@PathVariable("id") Long id) {
-        return carroService.getCarroById(id);
+    public ResponseEntity listarCarroById(@PathVariable("id") Long id) {
+        Optional<CarroDto> carro = carroService.getCarroById(id);
+
+        return carro.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+
+        //if ternário
+//        return carro.isPresent() ? ResponseEntity.ok(carro.get()) : ResponseEntity.notFound().build();
+
+        //If else
+//        if ((carro.isPresent())) {
+//            return ResponseEntity.ok(carro.get());
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
     }
 
     @GetMapping("/tipo/{tipo}")
-    public List<Carro> listarCarroByTipo(@PathVariable("tipo") String tipo) {
-        return carroService.getCarroByTipo(tipo);
+    public ResponseEntity listarCarroByTipo(@PathVariable("tipo") String tipo) {
+        List<CarroDto> carros = carroService.getCarroByTipo(tipo);
+
+        return  carros.isEmpty() ?  ResponseEntity.noContent().build() : ResponseEntity.ok(carros);
     }
 
     @PostMapping
@@ -35,10 +52,17 @@ public class CarrosController {
         carroService.insert(carro);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public String put(@PathVariable("id") Long id, @RequestBody Carro carro) {
         Carro c = carroService.update(carro, id);
 
         return "Carro atualizado com sucesso";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String delete(@PathVariable("id") Long id) {
+        carroService.delete(id);
+
+        return "Carro deletado com sucesso";
     }
 }

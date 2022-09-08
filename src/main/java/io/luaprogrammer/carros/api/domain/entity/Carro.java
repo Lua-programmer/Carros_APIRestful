@@ -3,7 +3,6 @@ package io.luaprogrammer.carros.api.domain.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Generated;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -20,6 +19,21 @@ public class Carro {
 
     @Column
     private String nome;
+
+    @Column
+    private String descricao;
+
+    @Column
+    private String urlFoto;
+
+    @Column
+    private String urlVideo;
+
+    @Column
+    private String latitude;
+
+    @Column
+    private String longitude;
 
     @Column
     private String tipo;

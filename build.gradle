@@ -21,6 +21,7 @@ dependencies {
     implementation group: 'org.modelmapper.extensions', name: 'modelmapper-spring', version: '3.1.0'
     runtimeOnly 'mysql:mysql-connector-java'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation group: 'com.h2database', name: 'h2'
 }
 
 tasks.named('test') {

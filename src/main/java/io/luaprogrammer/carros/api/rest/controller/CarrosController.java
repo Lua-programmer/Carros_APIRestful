@@ -19,12 +19,13 @@ public class CarrosController {
 
     private CarroService carroService;
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @GetMapping
     public ResponseEntity listarCarros() {
         return ResponseEntity.ok(carroService.getAllCarros());
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @GetMapping("/{id}")
     public ResponseEntity listarCarroById(@PathVariable("id") Long id) {
         CarroDto carro = carroService.getCarroById(id);
@@ -33,6 +34,7 @@ public class CarrosController {
 
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @GetMapping("/tipo/{tipo}")
     public ResponseEntity listarCarroByTipo(@PathVariable("tipo") String tipo) {
         List<CarroDto> carros = carroService.getCarroByTipo(tipo);

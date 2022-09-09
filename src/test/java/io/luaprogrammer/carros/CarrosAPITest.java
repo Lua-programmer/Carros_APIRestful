@@ -21,7 +21,7 @@ import static junit.framework.TestCase.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CarrosApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CarrosAPITest {
+public class  CarrosAPITest {
     @Autowired
     protected TestRestTemplate rest;
 

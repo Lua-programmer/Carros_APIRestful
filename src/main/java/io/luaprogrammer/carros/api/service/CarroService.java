@@ -3,6 +3,7 @@ package io.luaprogrammer.carros.api.service;
 import io.luaprogrammer.carros.api.domain.DTO.CarroDto;
 import io.luaprogrammer.carros.api.domain.entity.Carro;
 import io.luaprogrammer.carros.api.domain.repository.CarroRepository;
+import io.luaprogrammer.carros.api.exception.ObjectNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -25,8 +26,9 @@ public class CarroService {
         return  carroRepository.findAll().stream().map(CarroDto::create).collect(Collectors.toList());
     }
 
-    public Optional<CarroDto> getCarroById(Long id) {
-        return carroRepository.findById(id).map(CarroDto::create); //quando eu quero converter um tipo optional para outro
+    public CarroDto getCarroById(Long id) {
+        Optional<Carro> carro = carroRepository.findById(id);
+        return carroRepository.findById(id).map(CarroDto::create).orElseThrow(() -> new ObjectNotFoundException("Carro não encontrado"));
     }
 
     public List<CarroDto> getCarroByTipo(String tipo) {
@@ -62,8 +64,6 @@ public class CarroService {
     }
 
     public void delete(Long id) {
-        if (getCarroById(id).isPresent()) {
-            carroRepository.deleteById(id);
-        }
+        carroRepository.deleteById(id);
     }
 }

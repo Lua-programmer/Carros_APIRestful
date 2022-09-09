@@ -1,16 +1,16 @@
-package io.luaprogrammer.carros.api.rest;
+package io.luaprogrammer.carros.api.rest.controller;
 
 import io.luaprogrammer.carros.api.domain.DTO.CarroDto;
 import io.luaprogrammer.carros.api.domain.entity.Carro;
 import io.luaprogrammer.carros.api.service.CarroService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -19,6 +19,7 @@ public class CarrosController {
 
     private CarroService carroService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity listarCarros() {
         return ResponseEntity.ok(carroService.getAllCarros());
@@ -26,20 +27,10 @@ public class CarrosController {
 
     @GetMapping("/{id}")
     public ResponseEntity listarCarroById(@PathVariable("id") Long id) {
-        Optional<CarroDto> carro = carroService.getCarroById(id);
+        CarroDto carro = carroService.getCarroById(id);
 
-        return carro.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(carro);
 
-        //if ternário
-//        return carro.isPresent() ? ResponseEntity.ok(carro.get()) : ResponseEntity.notFound().build();
-
-        //If else
-//        if ((carro.isPresent())) {
-//            return ResponseEntity.ok(carro.get());
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
     }
 
     @GetMapping("/tipo/{tipo}")
@@ -49,6 +40,7 @@ public class CarrosController {
         return carros.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(carros);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity post(@RequestBody Carro carro) {
 
@@ -63,6 +55,7 @@ public class CarrosController {
                 .buildAndExpand(id).toUri();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/update/{id}")
     public ResponseEntity put(@PathVariable("id") Long id, @RequestBody Carro carro) {
 
@@ -75,10 +68,9 @@ public class CarrosController {
                 ResponseEntity.notFound().build();
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") Long id) {
         carroService.delete(id);
-
-        return "Carro deletado com sucesso";
     }
 }

@@ -2,9 +2,10 @@ package io.luaprogrammer.carros;
 
 import io.luaprogrammer.carros.api.domain.DTO.CarroDto;
 import io.luaprogrammer.carros.api.domain.entity.Carro;
+import io.luaprogrammer.carros.api.exception.ObjectNotFoundException;
 import io.luaprogrammer.carros.api.service.CarroService;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+//import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -15,7 +16,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-@RunWith(SpringRunner.class)
+//@RunWith(SpringRunner.class)
 @SpringBootTest
 class CarroServiceTests {
 
@@ -39,10 +40,9 @@ class CarroServiceTests {
         assertNotNull(id);
 
         //Buscar o Objeto
-        Optional<CarroDto> op = carroService.getCarroById(id);
-        assertTrue(op.isPresent());
+        c = carroService.getCarroById(id);
+        assertNotNull(c);
 
-        c = op.get();
         assertEquals("Ferrari", c.getNome());
         assertEquals("esportivos", c.getTipo());
 
@@ -50,7 +50,12 @@ class CarroServiceTests {
         carroService.delete(id);
 
         //Verificar se deletou
-        assertFalse(carroService.getCarroById(id).isPresent());
+        try {
+            assertNull(carroService.getCarroById(id));
+            fail("O carro não foi excluído");
+        } catch (ObjectNotFoundException e) {
+            //OK
+        }
     }
 
     @Test
@@ -72,11 +77,9 @@ class CarroServiceTests {
 
     @Test
     public void testGet() {
-        Optional<CarroDto> op = carroService.getCarroById(11L);
+        CarroDto c = carroService.getCarroById(11L);
 
-        assertTrue(op.isPresent());
-
-        CarroDto c = op.get();
+        assertNotNull(c);
 
         assertEquals("Ferrari FF", c.getNome());
     }

@@ -42,10 +42,3 @@ public class ExceptionConfig extends ResponseEntityExceptionHandler {
     }
 }
 
-class Error {
-    public String error;
-
-    public Error(String error) {
-        this.error = error;
-    }
-}
